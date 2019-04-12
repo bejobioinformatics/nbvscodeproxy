@@ -41,7 +41,7 @@ class VSCodeProxyHandler(SuperviseAndProxyHandler):
     def get_cmd(self):
         # vscode command. Augmented with user-identity and www-port.
         basedir = env['NOTEBOOK_DIR']
-	configdir = os.path.join(basedir, ".vscode")
+        configdir = os.path.join(basedir, ".vscode")
         return [
             'code-server',
             '--allow-http',
@@ -51,8 +51,10 @@ class VSCodeProxyHandler(SuperviseAndProxyHandler):
             '--user-data-dir=' + os.path.join(configdir, "user_data"),
             '--extensions-dir=' + os.path.join(configdir, "extensions"),
         ]
+
 def setup_handlers(web_app):
     web_app.add_handlers('.*', [
         (ujoin(web_app.settings['base_url'], 'vscode/(.*)'), VSCodeProxyHandler, dict(state={})),
         (ujoin(web_app.settings['base_url'], 'vscode'), AddSlashHandler),
     ])
+
