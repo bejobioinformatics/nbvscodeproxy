@@ -21,12 +21,12 @@ define(function(require) {
         menu.append(divider);
 
         /* create our list item */
-        var rsession_item = $('<li>')
+        var vscode_item = $('<li>')
             .attr('role', 'presentation')
             .addClass('new-rstudio');
 
         /* create our list item's link */
-        var rsession_link = $('<a>')
+        var vscode_link = $('<a>')
             .attr('role', 'menuitem')
             .attr('tabindex', '-1')
             .attr('href', base_url + 'rstudio/')
@@ -35,8 +35,8 @@ define(function(require) {
 
         /* add the link to the item and
          * the item to the menu */
-        rsession_item.append(rsession_link);
-        menu.append(rsession_item);
+        vscode_item.append(vscode_link);
+        menu.append(vscode_item);
     }
 
     return {

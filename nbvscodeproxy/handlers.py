@@ -23,15 +23,15 @@ class AddSlashHandler(IPythonHandler):
         self.redirect(urlunparse(dest))
 
 
-class RSessionProxyHandler(SuperviseAndProxyHandler):
-    '''Manage an RStudio rsession instance.'''
+class VSCodeProxyHandler(SuperviseAndProxyHandler):
+    '''Manage an VSCode rsession instance.'''
 
-    name = 'rsession'
+    name = 'vscode'
 
     def get_env(self):
         env = {}
 
-        # rserver needs USER to be set to something sensible,
+        # vscode needs USER to be set to something sensible,
         # otherwise it'll throw up an authentication page
         if not os.environ.get('USER', ''):
             env['USER'] = getpass.getuser()
@@ -39,50 +39,20 @@ class RSessionProxyHandler(SuperviseAndProxyHandler):
         return env
 
     def get_cmd(self):
-        # rsession command. Augmented with user-identity and www-port.
+        # vscode command. Augmented with user-identity and www-port.
+        basedir = env['NOTEBOOK_DIR']
+	configdir = os.path.join(basedir, ".vscode")
         return [
-            'rserver',
-            '--www-port=' + str(self.port)
+            'code-server',
+            '--allow-http',
+            '--no-auth',
+            '--host=0.0.0.0',
+            '--port=' + str(self.port),
+            '--user-data-dir=' + os.path.join(configdir, "user_data"),
+            '--extensions-dir=' + os.path.join(configdir, "extensions"),
         ]
-
-class ShinyProxyHandler(SuperviseAndProxyHandler):
-    '''Manage a Shiny instance.'''
-
-    name = 'shiny'
-    conf_tmpl = """run_as {user};
-server {{
-  listen {port};
-  location / {{
-    site_dir {site_dir};
-    log_dir {site_dir}/logs;
-    directory_index on;
-  }}
-}}
-"""
-
-    def write_conf(self, user, port, site_dir):
-        '''Create a configuration file and return its name.'''
-        conf = self.conf_tmpl.format(user=user, port=port, site_dir=site_dir)
-        f = tempfile.NamedTemporaryFile(mode='w', delete=False)
-        f.write(conf)
-        f.close()
-        return f.name
-
-    def get_env(self):
-        return {}
-
-    def get_cmd(self):
-        user = getpass.getuser()
-        site_dir = pwd.getpwnam(user).pw_dir
-        filename = self.write_conf(user, self.port, site_dir)
-
-        # shiny command.
-        return [ 'shiny-server', filename ] 
-
 def setup_handlers(web_app):
     web_app.add_handlers('.*', [
-        (ujoin(web_app.settings['base_url'], 'rstudio/(.*)'), RSessionProxyHandler, dict(state={})),
-        (ujoin(web_app.settings['base_url'], 'shiny/(.*)'),   ShinyProxyHandler, dict(state={})),
-        (ujoin(web_app.settings['base_url'], 'rstudio'), AddSlashHandler),
-        (ujoin(web_app.settings['base_url'], 'shiny'),   AddSlashHandler)
+        (ujoin(web_app.settings['base_url'], 'vscode/(.*)'), VSCodeProxyHandler, dict(state={})),
+        (ujoin(web_app.settings['base_url'], 'vscode'), AddSlashHandler),
     ])
