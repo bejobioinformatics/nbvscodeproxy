@@ -28,34 +28,34 @@ import {
 import '../style/index.css';
 
 /**
- * The command IDs used by the rstudio plugin.
+ * The command IDs used by the vscode plugin.
  */
 namespace CommandIDs {
   export
-  const launch = 'rsession:launch';
+  const launch = 'vscode:launch';
 };
 
 /**
  * The class name for the rstudio icon
  */
-const RSTUDIO_ICON_CLASS = 'jp-RStudioIcon';
+const VSCODE_ICON_CLASS = 'jp-VSCodeIcon';
 
 
 /**
- * Activate the rsession extension.
+ * Activate the vscode extension.
  */
 function activate(app: JupyterLab, palette: ICommandPalette, mainMenu: IMainMenu): void {
   let counter = 0;
-  const category = 'RStudio';
-  const namespace = 'rsession-proxy';
+  const category = 'VSCode';
+  const namespace = 'vscode-proxy';
   const command = CommandIDs.launch;
   const { commands, shell } = app;
 
   commands.addCommand(command, {
-    label: 'Launch RStudio',
-    caption: 'Start a new Rstudio Session',
+    label: 'Launch VSCode',
+    caption: 'Start a new VSCode Session',
     execute: () => {
-        window.open(PageConfig.getBaseUrl() + 'rstudio/', 'RStudio Session');
+        window.open(PageConfig.getBaseUrl() + 'vscode/', 'VSCode Session');
     }
   });
 
@@ -75,7 +75,7 @@ function activate(app: JupyterLab, palette: ICommandPalette, mainMenu: IMainMenu
  * The rsession handler extension.
  */
 const plugin: JupyterLabPlugin<void> = {
-  id: 'jupyterlab_rsessionproxy',
+  id: 'jupyterlab_vscodeproxy',
   autoStart: true,
   requires: [ICommandPalette, IMainMenu],
   activate: activate,

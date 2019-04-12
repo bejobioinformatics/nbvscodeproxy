@@ -4,16 +4,16 @@
 |----------------------------------------------------------------------------*/
 
 
-.jp-RStudioIcon {
-  background-image: url(images/rstudio.svg);
+.jp-VSCodeIcon {
+  background-image: url(images/visual-studio-code.svg);
 }
-.jp-Rsession {
+
+.jp-VSCode {
   min-width: 480px;
   background: white;
 }
 
-
-.jp-Rsession::before {
+.jp-VSCode::before {
     content: '';
     display: block;
     height: var(--jp-toolbar-micro-height);
@@ -23,7 +23,6 @@
     z-index: 1;
 }
 
-
-.jp-Rsession > iframe {
+.jp-VSCode > iframe {
   border: none;
 }

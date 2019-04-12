@@ -3,7 +3,7 @@ import setuptools
 setuptools.setup(
     name="nbvscodeproxy",
     version='0.7.0',
-    url="https://github.com/jupyterhub/nbvscodeproxy",
+    url="https://github.com/bejobioinformatics/nbvscodeproxy",
     author="Ryan Lovett",
     description="Jupyter extension to proxy vscode session",
     packages=setuptools.find_packages(),
